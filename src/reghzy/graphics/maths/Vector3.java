@@ -41,6 +41,22 @@ public class Vector3 {
         return this;
     }
 
+    public Vector3 multiply(Vector3 v) {
+        return multiply(v.x, v.y, v.z);
+    }
+
+    public Vector3 divide(Vector3 v) {
+        return divide(v.x, v.y, v.z);
+    }
+
+    public Vector3 add(Vector3 v) {
+        return add(v.x, v.y, v.z);
+    }
+
+    public Vector3 subtract(Vector3 v) {
+        return subtract(v.x, v.y, v.z);
+    }
+
     public Vector3 copy() {
         return new Vector3(this.x, this.y, this.z);
     }
