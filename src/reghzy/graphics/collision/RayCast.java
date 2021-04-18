@@ -1,10 +1,13 @@
 package reghzy.graphics.collision;
 
 import reghzy.graphics.maths.Vector3;
+import sun.font.TrueTypeGlyphMapper;
+
+import javax.swing.*;
 
 public class RayCast {
-    public Vector3 center;
-    public Vector3 direction;
+    public Vector3 start;
+    public Vector3 end;
 
     private Vector3 directionFraction;
 
@@ -13,38 +16,71 @@ public class RayCast {
      */
     public float lengthBeforeHit;
 
-    public RayCast(Vector3 center, Vector3 direction) {
-        this.center = center;
-        this.direction = direction;
+    public RayCast(Vector3 start, Vector3 end, float distance) {
+        this.start = start;
+        this.end = end;
+        this.end.z = distance;
         this.lengthBeforeHit = 0.0f;
-
-        directionFraction = new Vector3(1.0f / direction.x, 1.0f / direction.y, 1.0f / direction.z);
     }
 
-    public boolean hits(AxisAlignedBB box) {
-        float t1 = (box.minX - this.center.x) * directionFraction.x;
-        float t2 = (box.maxX - this.center.x) * directionFraction.x;
-        float t3 = (box.minY - this.center.y) * directionFraction.y;
-        float t4 = (box.maxY - this.center.y) * directionFraction.y;
-        float t5 = (box.minZ - this.center.z) * directionFraction.z;
-        float t6 = (box.maxZ - this.center.z) * directionFraction.z;
+    /*
+                                      |         |
+                                     /|         |
+                                    / |         |
+                                   /  |         |
+                                  /   |         |
+                                 /    |         |
+                                /     |         |                                   5   + Z
+                               /      |         |/
+                              /       |        /|
+                             /        |      /  |
+       - X _________________/_________|____/____|_________________________________  4   + X
+                           /          |         |
+                          /           |   AABB  |
+                         /           /|         |
+       _________________/__________/__|_________|_________________________________  3
+                       /         /    |         |
+                      /        /      |         |
+                     /       /        |         |
+                    /      /          |         |                                   2
+                   /     /            |         |
+                  /    /              A  PlaneZ B
+                 /   /
+                /  /                                                                1   - Z
+            RAYS /
 
-        float tMin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
-        float tMax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
+            angle: 0.6
+                degrees: 30~                                                        0
 
-        // if tMax < 0, ray (line) is intersecting AABB, but the whole AABB is behind us
-        if (tMax < 0) {
-            lengthBeforeHit = tMax;
-            return false;
-        }
+        0               1             2             3               4               5
 
-        // if tMin > tMax, ray doesn't intersect AABB
-        if (tMin > tMax) {
-            lengthBeforeHit = tMax;
-            return false;
-        }
+     */
 
-        lengthBeforeHit = tMin;
-        return true;
+    public boolean hitsBox(AxisAlignedBB aabb) {
+        return false;
+    }
+
+    public boolean hitsPlaneAX(AxisAlignedBB aabb) {
+        return this.start.x < aabb.minX && this.end.x > aabb.minX;
+    }
+
+    public boolean hitsPlaneBX(AxisAlignedBB aabb) {
+        return this.start.x < aabb.maxX && this.end.x > aabb.maxX;
+    }
+
+    public boolean hitsPlaneAY(AxisAlignedBB aabb) {
+        return this.start.x < aabb.minX && this.end.x > aabb.minX;
+    }
+
+    public boolean hitsPlaneBY(AxisAlignedBB aabb) {
+        return this.start.x < aabb.maxX && this.end.x > aabb.maxX;
+    }
+
+    public boolean hitsPlaneAZ(AxisAlignedBB aabb) {
+        return this.start.z < aabb.minZ && this.end.z > aabb.minZ;
+    }
+
+    public boolean hitsPlaneBZ(AxisAlignedBB aabb) {
+        return this.start.z < aabb.maxZ && this.end.z > aabb.maxZ;
     }
 }
