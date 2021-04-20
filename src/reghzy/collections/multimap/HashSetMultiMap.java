@@ -63,6 +63,15 @@ public class HashSetMultiMap<K, V> implements MultiMap<K, V> {
         return getOrCreateValues(key).size();
     }
 
+    @Override
+    public HashMap<K, Collection<V>> asMap() {
+        HashMap<K, Collection<V>> map = new HashMap<K, Collection<V>>(keysSize());
+        for(K key : getKeys()) {
+            map.put(key, getValues(key));
+        }
+        return map;
+    }
+
     public ArrayList<Collection<V>> getAllValues() {
         ArrayList<Collection<V>> valuesCollection = new ArrayList<Collection<V>>(this.map.size() * 4);
         for (K key : getKeys()) {

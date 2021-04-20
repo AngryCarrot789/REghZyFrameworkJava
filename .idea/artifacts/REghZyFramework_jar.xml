@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="REghZyFramework:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/REghZyFramework_jar</output-path>
+    <root id="archive" name="REghZyFramework.jar">
+      <element id="module-output" name="REghZyFramework" />
+    </root>
+  </artifact>
+</component>

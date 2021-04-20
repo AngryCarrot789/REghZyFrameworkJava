@@ -1,7 +1,6 @@
 package reghzy.helpers;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
 
 public final class Memory {
     private Memory() {
@@ -68,12 +67,39 @@ public final class Memory {
 
     public static char[] combine(int totalLength, char[]... arrays) {
         char[] output = new char[totalLength];
-        for (int i = 0, j = 0, len = arrays.length; j < len; j++) {
+        for (int outIndex = 0, j = 0, len = arrays.length; j < len; j++) {
             char[] array = arrays[j];
-            System.arraycopy(array, 0, output, i, array.length);
-            i += array.length;
+            System.arraycopy(array, 0, output, outIndex, array.length);
+            outIndex += array.length;
         }
         return output;
+    }
+
+    public static int indexOf(char[] array, char[] value) {
+        char first = value[0];
+        int i = 0;
+        while (i < array.length) {
+            char c = array[i++];
+            if (c == first) {
+                boolean found = true;
+                int j = 1, k = i + 1;
+                while (j < value.length && k < array.length) {
+                    if (value[j++] != array[k++]) {
+                        found = false;
+                        break;
+                    }
+                }
+                if (found) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public static boolean contains(char[] array, char[] value) {
+        return indexOf(array, value) != -1;
     }
 
     public static <T> T[] createArray(Class<? extends T> type, int length) {
